@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>太平军二破江南大营战役专题网站 </title>
+  <script src="../js/echarts3.8.5.min.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=ItWaUKn8grhYhNI9tLXXqyHtICefiAjv"></script>
+  <script type="text/javascript" src="../js/bmap3.8.5.min.js"></script>
+  <script type="text/javascript" src="../js/jquery.min.js"></script>
+  <script type="text/javascript" src="../js/DrawingManager_min.js"></script>
+  <script type="text/javascript" src="../js/installData.js"></script>
+  <script type="text/javascript" src="../js/stylejson.js"></script>
+  <link rel="stylesheet" href="../js/DrawingManager_min.css" />
   <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../js/slidebar.css" rel="stylesheet" type="text/css">
   <style type="text/css">
@@ -32,7 +40,6 @@
         font-size:16px;
     }
     #content{
-        
         background-color: white;
         height: 650px;
         margin-left:8%;
@@ -44,6 +51,13 @@
       text-align: center;
       font-size:12px;
       color:#9c9c9c;
+    }
+    #allmap {
+        float: right;
+        margin-top:10px;
+        margin-right:10px;
+        height: 90%;
+        width: 80%;
     }
     .head-image{
       height: 200px;
@@ -94,10 +108,16 @@
           </ul>
         </div>
     </div>
+    <div id="allmap">
+    </div>
   </div>
-  <div id="end">版权所有：南京师范大学  |  技术支持：于璐&张佘淑  |  ICP备案号：苏ICP备19024534号
+<div id="end">版权所有：南京师范大学  |  技术支持：于璐&张佘淑  |  ICP备案号：苏ICP备19024534号
 </div>
     <script>
+    drawMap();
+    bmap.setMapStyleV2({     
+        styleId: '3d71dc5a4ce6222d3396801dee06622d'
+    });
     </script>
  </body>
 </html>
