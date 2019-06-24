@@ -23,11 +23,6 @@ var color = ["red", "#000"]
 
 //坐标信息
 var geoCoordMap = {
-	/*'壤城路北环路': [112.09988, 32.70335],
-	'三贤路与北环路交叉': [112.0874, 32.6954],
-	'邓南路湍河桥': [112.1269, 32.6976],
-	'南环路与东一环路': [112.10888, 32.6626],
-	'刁河大桥': [112.0409, 32.6434],*/
 	'浦口':[118.67635597199266,32.11964661848842],
 	'太平':[118.49399408050583,31.543626698197027],
 	'芜湖':[118.3835870898353,31.326619854465303],
@@ -46,9 +41,25 @@ var geoCoordMap = {
 	'湖州':[120.08156168415176,30.854313019316912],
 	'武康':[119.96164562890195,30.555674488576294],
 	'余杭':[119.93880280324598,30.291078424727967],
-	'杭州':[120.15961678458703,30.264428461462667]
+	'杭州':[120.15961678458703,30.264428461462667],
+	'小水关':[118.85632962302962,32.02538854794635],
+	'丹阳':[119.53933011014315,31.988840026896795],
+	'常州':[119.95240454075528,31.795627793223378],
+	'苏州':[120.61379952193589,31.31459595628472],
+	'嘉兴':[120.74426536888555,30.761989932290703],
+	'桐乡':[120.54010761458531,30.640637420993357],
+	'石门':[120.42303813309846,30.532133999127495],
 };
-
+var points=[
+	[118.85632962302962,32.02538854794635],
+	[119.53933011014315,31.988840026896795],
+	[119.95240454075528,31.795627793223378],
+	[120.61379952193589,31.31459595628472],
+	[120.74426536888555,30.761989932290703],
+	[120.54010761458531,30.640637420993357],
+	[120.42303813309846,30.532133999127495],
+	[120.15961678458703,30.264428461462667]
+]
 //地图中心点以及缩放级别等
 var bmap = {
 	center: [119.333, 31.275],
@@ -194,6 +205,82 @@ var accompanyData = [
 		value: '1860-03-05T03:14:39.000Z'
 	}, 1,{value:null}],
 ];
+var qingData=[
+	[{
+		name:'小水关',
+		value:null,
+	},{
+		name:'丹阳',
+		value:null,
+	},3,{value:null}],
+	[{
+		name:'丹阳',
+		value:null,
+	},{
+		name:'常州',
+		value:null,
+	},3,{value:null}],
+	[{
+		name:'常州',
+		value:null,
+	},{
+		name:'苏州',
+		value:null,
+	},3,{value:null}],
+	[{
+		name:'苏州',
+		value:null,
+	},{
+		name:'嘉兴',
+		value:null,
+	},3,{value:null}],
+	[{
+		name:'嘉兴',
+		value:null,
+	},{
+		name:'桐乡',
+		value:null,
+	},3,{value:null}],
+	[{
+		name:'桐乡',
+		value:null,
+	},{
+		name:'石门',
+		value:null,
+	},3,{value:null}],
+	[{
+		name:'石门',
+		value:null,
+	},{
+		name:'杭州',
+		value:null,
+	},3,{value:null}],
+];
+//绘制多边形
+function renderItem(params, api) {
+	var coords = [[116.94415283203125,30.07318115234375],[116.83197021484375,30.07318115234375],[116.689208984375,30.08465576171875],[116.63970947265625,30.10931396484375],[116.56927490234375,30.20257568359375],[116.4722900390625,30.27117919921875],[116.386474609375,30.339599609375],[116.2694091796875,30.482421875],[116.4073486328125,30.515869140625],[116.54071044921875,30.6346435546875],[116.60736083984375,30.75848388671875],[116.67864990234375,30.963134765625],[116.702392578125,31.1962890625],[116.74530029296875,31.3533935546875],[116.8880615234375,31.58172607421875],[117.05462646484375,31.8338623046875],[117.20220947265625,31.99578857421875],[117.39251708984375,32.1434326171875],[117.663818359375,32.27191162109375],[117.93505859375,32.37176513671875],[118.11590576171875,32.4193115234375],[118.30621337890625,32.49078369140625],[118.415771484375,32.500244140625],[118.50616455078125,32.4527587890625],[118.55853271484375,32.3480224609375],[118.64410400390625,32.2098388671875],[118.753662109375,32.162353515625],[118.85357666015625,32.10052490234375],[118.87249755859375,32.01495361328125],[118.82012939453125,31.9482421875],[118.73455810546875,31.886474609375],[118.62982177734375,31.79583740234375],[118.57745361328125,31.677001953125],[118.48809814453125,31.4000244140625],[118.284423828125,31.09356689453125],[118.1719970703125,31.009765625],[117.876953125,30.89556884765625],[117.76849365234375,30.78515625],[117.57623291015625,30.61376953125],[117.3687744140625,30.4520263671875],[117.2431640625,30.33587646484375],[117.18023681640625,30.233154296875],[117.0794677734375,30.11700439453125],[117.0374755859375,30.09210205078125],[116.94415283203125,30.07318115234375]];
+	var points = [];
+	for (var i = 0; i < coords.length; i++) {
+			points.push(api.coord(coords[i]));
+	}
+	var color = api.visual('color');
+
+	return {
+			type: 'polygon',
+			shape: {
+					points: echarts.graphic.clipPointsByRect(points, {
+							x: params.coordSys.x,
+							y: params.coordSys.y,
+							width: params.coordSys.width,
+							height: params.coordSys.height
+					})
+			},
+			style: api.style({
+					fill: color,
+					stroke: echarts.color.lift(color)
+			})
+	};
+}
 //时间格式化方法
 function format(fmt, date) {
 	var o = {
@@ -369,10 +456,12 @@ async function forData() {
 	var targetNum = targetData.length;
 	//伴随点的数量
 	var accompanyNum = accompanyData.length;
+	var qingNum=qingData.length;
 
 	//目标和伴随的线
 	var targetLines = [];
 	var accompanyLines = [];
+	var qingLines=[];
 
 	//坐标圆点信息
 	var circleData = [];
@@ -422,6 +511,9 @@ async function forData() {
 		accompanyLines.push(sumData(accompanyData[i])[0][0]);
 		addData.push(sumData(accompanyData[i]));
 	}
+	for(var i = 0; i < qingNum; i++) {
+		qingLines.push(sumData(qingData[i])[0][0]);
+	}
 
 	//循环得到坐标圆点
 	for(var key in geoCoordMap) {
@@ -438,7 +530,7 @@ async function forData() {
 
 	//进行逻辑判断
 	await logic(addData);
-
+	var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 	option = {
 		baseOption: {
 			bmap: bmap,
@@ -447,14 +539,35 @@ async function forData() {
 				subtext: '战役开始于1860年1月28日，于同年5月6日结束，前后历时九十八天',
 				left: 'middle'
 		},
+		legend:{
+			type:'plain',
+			show:'true',
+      orient: 'vertical',
+			//top: 'bottom',
+			bottom:10,
+			right:10,
+      //left: 'right',
+      textStyle: {
+						color: '#fff',
+						
+			padding: [3, 4, 5, 6],
+			},
+			data:['作战地点','李秀成行军路线','李世贤行军路线','清军行军路线','太平军势力范围(战前)'],
+			backgroundColor:'#fffaf5',
+			shadowColor:'gray',
+			shadowBlur:3,
+			textStyle: {
+				color:'black'
+			}
+		},
 			timeline: {
 				axisType: 'category', //category
 				autoPlay: true,
 				playInterval: 4000,
 				data: num,
-				left: 300,
+				left: 200,
 				bottom:20,
-				width:500,
+				width:600,
 				tooltip: {
 					trigger: 'item',
 					formatter: function(params) {
@@ -517,8 +630,8 @@ async function forData() {
 						show: true,
 						// period: 3,
 						trailLength: 0,
-						symbol: "pin",
-						symbolSize: 17,
+						symbol:"arrow",
+						symbolSize:10,
 						// delay:2000
 					},
 					lineStyle: {
@@ -539,8 +652,8 @@ async function forData() {
 						show: true,
 						// period: 3,
 						trailLength: 0,
-						symbol: "arrow",
-						symbolSize: 17,
+						symbol:"arrow",
+						symbolSize:10,
 						// delay:2000
 					},
 					lineStyle: {
@@ -561,15 +674,15 @@ async function forData() {
 						show: true,
 						// period: 3,
 						trailLength: 0,
-						symbol: "arrow",
-						symbolSize: 15
+						symbol:"arrow",
+						symbolSize:10,
 					},
 					lineStyle: {
 						normal: {
-							color: color[1],
+							color: "black",
 							width: 0,
 							opacity: 0.4,
-							curveness: 0.4
+							curveness: 0.2
 						}
 					},
 				},
@@ -582,23 +695,25 @@ async function forData() {
 						show: true,
 						// period: 3,
 						trailLength: 0,
-						symbol: "arrow",
-						symbolSize: 15
+						symbol:"arrow",
+						symbolSize:10,
 					},
 					lineStyle: {
 						normal: {
-							color: color[1],
+							color: "black",
 							width: 0,
 							opacity: 0.4,
-							curveness: 0.4
+							curveness: 0.2
 						}
 					},
 				},
 				{
 					type: 'lines',
+					name:'李秀成行军路线',
 					coordinateSystem: 'bmap',
 					polyline:true,
 					zlevel: 2,
+					smooth:true,
 					effect: {
 						show: true,
 						trailLength: 0,
@@ -607,17 +722,19 @@ async function forData() {
 					lineStyle: {
 						normal: {
 							color: color[0],
-							width: 1,
-							opacity: 0.4,
-							curveness: 0.2
-						}
+							width: 3,
+							opacity: 0.6,
+							curveness: 0.2,
+						},
 					},
 					data: targetLines
 				},
 				{
 					type: 'lines',
+					name:'李世贤行军路线',
 					coordinateSystem: 'bmap',
 					polyline:true,
+					smooth:true,
 					zlevel: 2,
 					effect: {
 						show: true,
@@ -627,34 +744,81 @@ async function forData() {
 					lineStyle: {
 						normal: {
 							color: color[1],
-							width: 1,
-							opacity: 0.4,
-							curveness: 0.4
-						}
+							width: 3,
+							opacity: 0.6,
+							curveness: 0.2
+						},
 					},
 					data: accompanyLines
 				},
 				{
+					type: 'lines',
+					name:'清军行军路线',
+					coordinateSystem: 'bmap',
+					symbol:'arrow',
+					polyline:true,
+					smooth:true,
+					zlevel: 2,
+					effect: {
+						show: true,
+						trailLength: 0,
+						symbolSize: 3
+					},
+					lineStyle: {
+						normal: {
+							color: "#003399",
+							width: 3,
+							opacity: 0.4,
+							curveness: 0.2
+						},
+					},
+					data: qingLines,
+				},
+				{
+					type: 'custom',
+					name:'太平军势力范围(战前)',
+					coordinateSystem: 'bmap',
+					renderItem: renderItem,
+					itemStyle: {
+							normal: {
+								color:"white",
+								opacity: 0.5
+							}
+					},
+					animation: false,
+					silent: true,
+					data: [0],
+					z: -10
+			},
+				{
 					type: 'effectScatter',
+					name:'作战地点',
 					coordinateSystem: 'bmap',
 					polyline:true,
 					zlevel: 2,
 					rippleEffect: {
-						brushType: 'stroke'
+						scale:1.5
 					},
 					label: {
 						normal: {
 							show: true,
 							position: 'right',
-							formatter: '{b}'
+							formatter: '{b}',
+							color:'#00000',
+							fontWeight:'bold',
+							fontSize:14,
+							offset:[5,5],
 						}
 					},
 					symbolSize: 8,
+					hoverAnimation: true,
+					//symbol:'image://..img/fire.png',
 					showEffectOn: 'render',
 					itemStyle: {
 						normal: {
-							color: "black"
-						}
+							color: '#666666',
+							opacity:0.8
+						},
 					},
 					data: circleData
 				}
@@ -712,6 +876,6 @@ function draw_Manager() {
 	map.addControl(new BMap.OverviewMapControl());    
 	map.addControl(new BMap.MapTypeControl());
 	map.setMapStyleV2({     
-		styleId: 'a2529087d8d5ef15d9b9c0b753a1c637'
+		styleId: 'f4e5927fd72ffab059d57fbce4f91256'
 	});
 }

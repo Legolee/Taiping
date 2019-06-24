@@ -170,3 +170,22 @@
   background: -moz-linear-gradient(top,  #fff,  #ededed);
   filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed')
 }
+.switchbutton{
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: 微软雅黑;
+  color: #7f7f7f;
+  font-size: 16px;
+  background: #fff;
+  padding: 6px 20px 6px 20px;
+  border: solid #b8b8b8 1px;
+  text-decoration: none;
+  margin-top:20px;
+  margin-left:50px;
+}
+.switchbutton:hover{
+  color: #7f7f7f;
+  background: #ededed;
+  text-decoration: none;
+}

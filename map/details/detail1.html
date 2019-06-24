@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../js/DrawingManager_min.css" />
   <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../js/slidebar.css" rel="stylesheet" type="text/css">
+  <link href="../js/buttons.css" rel="stylesheet" type="text/css">
   <style type="text/css">
     body {
         font-family: "微软雅黑";
@@ -41,7 +42,7 @@
     }
     #content{
         background-color: white;
-        height: 650px;
+        height: 660px;
         margin-left:8%;
         margin-right:8%;
         box-shadow: 0px 0px 5px 0px rgba(143, 143, 143, 0.5);
@@ -56,8 +57,23 @@
         float: right;
         margin-top:10px;
         margin-right:10px;
-        height: 90%;
+        height: 585px;
         width: 80%;
+    }
+    #contain{
+            float: right;overflow:hidden;list-style:none;width:400px;height:55px;margin:0px;padding-left: 100px;
+        }
+        #contain p{
+            height:30px;line-height:30px;white-space:nowrap;overflow:hidden;font-size:15px;
+        }
+    #bottom-container{
+        width:80%;
+        height:55px;
+    }
+    #button-container{
+        float: left;
+        overflow:hidden;
+        height:55px;
     }
     .head-image{
       height: 200px;
@@ -110,14 +126,41 @@
     </div>
     <div id="allmap">
     </div>
+<div id="bottom-container">
+    <div id="contain">
+        <p>李秀成南下芜湖,李世贤攻下南陵</p>
+        <p>李世贤、刘官芳合军南进，败湘军副将杨名声，占泾县</p>
+        <p>李世贤占旌德，造成太平军南下假象</p>
+        <p>李秀成师出南陵，东渡青弋江，经高桥过水东</p>
+        <p>李世贤挥师东进，占宁国县城，由皖南进浙江</p>
+        <p>李秀成取广德州城，自率主力趋浙江</p>
+        <p>李秀成合军进攻安吉</p>
+        <p>李世贤合军进攻安吉</p>
+        <p>合军进攻梅溪镇</p>
+        <p>合军进攻梅溪镇</p>
+        <p>合军进攻泗安镇、虹星桥</p>
+        <p>合军进攻泗安镇、虹星桥</p>
+        <p>合军进攻长兴</p>
+        <p>合军进攻长兴</p>
+        <p>李世贤攻湖州</p>
+        <p>李秀成率精锐七千人，乔装清军，克武康、余杭</p>
+        <p>李秀成扎营西湖，率部围攻，于19日破城</p>
+    </div>
+    <div id="button-container"><br>
+     <a href="detail1.html" class="switchbutton">太平军南下</a>
+     <a href="detail1_1.html" class="switchbutton">反攻天京</a>
+    </div>
+</div>
   </div>
 <div id="end">版权所有：南京师范大学  |  技术支持：于璐&张佘淑  |  ICP备案号：苏ICP备19024534号
 </div>
     <script>
-    drawMap();
-    bmap.setMapStyleV2({     
-        styleId: '3d71dc5a4ce6222d3396801dee06622d'
-    });
+        drawMap();
+        function setTime(){
+        var contain=document.getElementById("contain");
+        contain.appendChild(contain.firstChild);
+    }
+    setInterval("setTime()",2000);
     </script>
  </body>
 </html>
