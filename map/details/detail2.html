@@ -2,9 +2,14 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no width=device-width">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>太平军二破江南大营战役专题网站 </title>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=c7192a79620ec486a34b5c3610cea816"></script>
+  <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
+  <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+
+  <link rel="stylesheet" href="../js/demo.css"/>
   <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../js/slidebar.css" rel="stylesheet" type="text/css">
   <style type="text/css">
@@ -51,6 +56,26 @@
       filter:alpha(opacity=80); 
       background:url("../img/head.jpg");
     }
+    #container{
+      float: right;
+      margin-top:10px;
+      margin-right:10px;
+      height: 90%;
+      width: 80%;
+    }
+    .input-card .btn{
+      float:right;
+      margin-right: 1px;
+      margin-left: 1px;
+      width: 9rem;
+    }
+
+    .input-card .btn:last-child{
+      float: right;
+    
+      margin-right: 0;
+    }
+
     
   </style>
  </head>
@@ -94,10 +119,361 @@
           </ul>
         </div>
     </div>
-  </div>
+    <div class="input-card">
+
+        <div class="input-item">
+            <input type="button" class="btn" value="李秀成部" id="start" onclick="lixiucheng()"/>
+            <input type="button" class="btn" value="李世贤部" id="pause" onclick="lishixian()"/>
+            <input type="button" class="btn" value="刘官芳部" id="resume" onclick="liuguanfang()"/>
+            <input type="button" class="btn" value="陈玉成部" id="yucheng" onclick="chenyucheng()"/>
+            <input type="button" class="btn" value="杨辅清部" id="fuqing" onclick="yangfuqing()"/>
+        </div>
+        <div class="input-item">
+            <input type="button" class="btn" value="反攻天京" id="fangong" onclick="fangong()"/>
+            <input type="button" class="btn" value="虚攻湖杭" id="stop" onclick="quanguocheng()"/>
+            
+        </div>
+    </div>
+    <div id="container"></div>
+  </div> 
   <div id="end">版权所有：南京师范大学  |  技术支持：于璐&张佘淑  |  ICP备案号：苏ICP备19024534号
 </div>
     <script>
+        var marker1,lineArr1 = [[118.33436,30.914923],[118.757995,30.945667],[118.96584,30.78832],[119.420935,30.877555],[119.680353,30.638675],[119.789587,30.77908],[119.653093,30.905191],[119.910952,31.026666],[119.97375,30.53439],[120.209947,30.245853]];//李秀成
+        var marker2,lineArr2=[[118.419864,30.688578],[118.540487,30.28635],[118.982915,30.633571],[119.680353,30.638675],[119.789587,30.77908],[119.653093,30.905191],[119.910952,31.026666],[120.102398,30.867198]];//李世贤
+        var marker3,lineArr3=[[118.419864,30.688578],[118.540487,30.28635],[118.141568,30.272942],[117.486306,30.210313],[118.578519,30.067533]]//刘官芳
+        var marker4,lineArr1_2=[[120.209947,30.245853],[119.420935,30.877555],[118.892142,31.319928],[119.484211,31.416911],[119.109888,31.838679],[119.168695,31.944999],[118.900787,31.962036],[118.94075,31.932806,[118.84088,31.960198]]];//李秀成
+        var marker5,lineArr2_2=[[120.102398,30.867198],[118.892142,31.319928],[119.484211,31.416911],[119.823308,31.340637],[119.946973,31.772752],[119.597897,31.72324723],[119.168695,31.944999]];//李世贤
+        var marker6,lineArr3_2=[[118.578519,30.067533],[119.061504,31.296392],[118.892085,31.328471],[119.044582,31.662243],[118.839953,31.837949],[118.78177,31.997817]]//刘官芳
+        var marker7,lineArr4=[[119.061504,31.296392],[118.892085,31.328471],[119.044582,31.662243],[118.839953,31.837949]];//杨辅清
+        var marker8,lineArr5=[[118.341787,31.496952],[118.839685,31.953702],[118.663679,31.922974],[118.667591,31.974042],[118.759817,31.954077]];//陈玉成
+
+        var markers=[];
+        var lnglats=[[117.486306,30.210313],[118.578519,30.067533],[118.540487,30.28635],[118.419864,30.688578],[118.982915,30.633571],[118.96584,30.78832],[118.33436,30.914923],[118.892142,31.319928],[118.892085,31.328471],[119.044582,31.662243],[118.839953,31.837949],[119.420935,30.877555],[119.653093,30.905191],[119.789587,30.77908],[119.823308,31.340637],[119.484211,31.416911],[119.597897,31.72324723],[119.168695,31.944999],[118.94075,31.932806],[118.900787,31.962036],[119.109888,31.838679],[119.680353,30.638675],[119.910952,31.026666],[118.341787,31.496952],[118.78177,31.997817],[118.839685,31.953702],[118.759817,31.954077],[118.663679,31.922974]];
+        var labels=['石埭','绩溪','旌德','泾县','宁国县','水东','南宁','建平','高淳','溧水','秣陵关','广德','泗安','梅溪','宜兴','溧阳','金坛','句容','淳化','马鞍山','赤山湖','安吉','长兴','西梁山','雨花台','江宁','善桥','板桥'];
+
+        var map = new AMap.Map("container", {
+            resizeEnable: true,
+            center: [118.796623,32.059352],
+            mapStyle:"amap://styles/whitesmoke",
+            zoom: 10
+        });
+
+        var wms  = new AMap.TileLayer.WMS({
+    url: 'http://localhost:8080/geoserver/taiping/wms?service=WMS&version=1.1.0&request=GetMap&layers=taiping:China1988_prov_region&styles=&bbox=73.63950037000006,18.148685038000053,135.0568775910001,53.624464612000075&width=768&height=443&srs=EPSG:3857&format=application/openlayers', // wms服务的url地址
+    blend: true, // 地图级别切换时，不同级别的图片是否进行混合
+    tileSize: 512, // 加载WMS图层服务时，图片的分片大小
+    params: {
+        'LAYERS': 'topp:states',
+        VERSION:'1.3.0'
+    } // OGC标准的WMS地图服务的GetMap接口的参数
+});
+
+map.add(wms);
+
+        for(var i=0;i<lnglats.length;i++){
+        var lnglat=lnglats[i];
+        var marker = new AMap.Marker({
+            content: labels[i],
+            position: new AMap.LngLat(lnglat[0],lnglat[1]),
+            //icon: 'temp/gate.png',
+            offset: new AMap.Pixel(-20,-8)
+        })
+        marker.setMap(map);
+
+    }
+
+    marker1 = new AMap.Marker({
+        map: map,
+        position: [118.33436,30.914923],
+        icon: new AMap.Icon({
+          image:"../img/f1.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    });
+    marker2=new AMap.Marker({
+        map: map,
+        position: [118.419864,30.688578],
+        icon: new AMap.Icon({
+          image:"../img/f2.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+    marker3=new AMap.Marker({
+        map: map,
+        position: [118.419864,30.688578],
+        icon: new AMap.Icon({
+          image:"../img/f3.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+    marker4=new AMap.Marker({
+        map: map,
+        position: [120.209947,30.245853],
+        icon: new AMap.Icon({
+          image:"../img/f1.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+    marker5=new AMap.Marker({
+        map: map,
+        position: [120.102398,30.867198],
+        icon: new AMap.Icon({
+          image:"../img/f2.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+    marker6=new AMap.Marker({
+        map: map,
+        position: [118.578519,30.067533],
+        icon: new AMap.Icon({
+          image:"../img/f3.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+    marker7=new AMap.Marker({
+        map: map,
+        position: [119.061504,31.296392],
+        icon: new AMap.Icon({
+          image:"../img/f4.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+    marker8=new AMap.Marker({
+        map: map,
+        position: [118.341787,31.496952],
+        icon: new AMap.Icon({
+          image:"../img/f5.png",
+          size:new AMap.Size(36,36),
+          imageSize: new AMap.Size(36,36)
+
+        }),
+        offset: new AMap.Pixel(-26, -13),
+        autoRotation: true,
+        angle:0,
+    })
+
+    // 绘制轨迹
+    var polyline1 = new AMap.Polyline({
+        map: map,
+        path: lineArr1,
+        showDir:true,
+        strokeColor: "#28F",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        strokeStyle: "gradient"  //线样式
+    });
+    var polyline2=new AMap.Polyline({
+        map:map,
+        path:lineArr2,
+        showDir:true,
+        strokeColor:"#40F",
+        strokeWeight:4,
+    });
+    var polyline3=new AMap.Polyline({
+        map:map,
+        path:lineArr3,
+        showDir:true,
+        strokeColor:"#50F",
+        strokeWeight:6,
+    });
+    var polyline4=new AMap.Polyline({
+        map:map,
+        path:lineArr1_2,
+        showDir:true,
+        strokeColor:"#28F",
+        strokeWeight:4,
+    });
+    var polyline5=new AMap.Polyline({
+        map:map,
+        path:lineArr2_2,
+        showDir:true,
+        strokeColor:"#50F",
+        strokeWeight:4,
+    });
+    var polyline6=new AMap.Polyline({
+        map:map,
+        path:lineArr3_2,
+        showDir:true,
+        strokeColor:"#50F",
+        strokeWeight:4,
+    });
+    var polyline7=new AMap.Polyline({
+        map:map,
+        path:lineArr4,
+        showDir:true,
+        strokeColor:"#50F",
+        strokeWeight:4,
+    });
+    var polyline8=new AMap.Polyline({
+        map:map,
+        path:lineArr5,
+        showDir:true,
+        strokeColor:"#50F",
+        strokeWeight:4,
+    });
+
+    var passedPolyline1 = new AMap.Polyline({
+        map: map,
+        path: lineArr1,
+        strokeColor: "#DC143C",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline2=new AMap.Polyline({
+        map:map,
+        path:lineArr2,
+        strokeColor: "#01814A",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline3=new AMap.Polyline({
+        map:map,
+        path:lineArr3,
+        strokeColor: "#FFA042",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline4=new AMap.Polyline({
+        map:map,
+        path:lineArr1_2,
+        strokeColor: "#DC143C",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline5=new AMap.Polyline({
+        map:map,
+        path:lineArr2_2,
+        strokeColor: "#01814A",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline6=new AMap.Polyline({
+        map:map,
+        path:lineArr3_2,
+        strokeColor: "#FFA042",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline7=new AMap.Polyline({
+        map:map,
+        path:lineArr4,
+        strokeColor: "#2894FF",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline8=new AMap.Polyline({
+        map:map,
+        path:lineArr5,
+        strokeColor: "#FF0000",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 4,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+
+
+    marker1.on('moving', function (e) {
+        passedPolyline1.setPath(e.passedPath);
+    });
+    marker2.on('moving',function(e){
+        passedPolyline2.setPath(e.passedPath);
+    });
+    marker3.on('moving',function(e){
+        passedPolyline3.setPath(e.passedPath);
+    });
+    marker4.on('moving',function(e){
+        passedPolyline4.setPath(e.passedPath);
+    });
+    marker5.on('moving',function(e){
+        passedPolyline5.setPath(e.passedPath);
+    });
+    marker6.on('moving',function(e){
+        passedPolyline6.setPath(e.passedPath);
+    });
+    marker7.on('moving',function(e){
+        passedPolyline7.setPath(e.passedPath);
+    });
+    marker8.on('moving',function(e){
+        passedPolyline8.setPath(e.passedPath);
+    });
+
+    map.setFitView();
+
+    function lixiucheng () {
+      marker1.moveAlong(lineArr1, 100000);
+      marker4.moveAlong(lineArr1_2,100000);
+    }
+
+
+    function lishixian () {
+        marker2.moveAlong(lineArr2,100000);
+    }
+
+    function liuguanfang () {
+        marker3.moveAlong(lineArr3,100000);
+    }
+
+    function quanguocheng () {
+        marker1.moveAlong(lineArr1, 100000);
+        marker2.moveAlong(lineArr2, 100000);
+        marker3.moveAlong(lineArr3, 100000);
+        
+    }
+    function fangong(){
+      marker4.moveAlong(lineArr1_2,150000);
+      marker5.moveAlong(lineArr2_2,150000);
+      marker6.moveAlong(lineArr3_2,100000);
+      marker7.moveAlong(lineArr4,100000);
+      marker8.moveAlong(lineArr5,100000);
+    }
+    function yangfuqing(){
+      marker7.moveAlong(lineArr4,500);
+    }
+    function chenyucheng(){
+      marker8.moveAlong(lineArr5,100000);
+    }
     </script>
  </body>
 </html>
