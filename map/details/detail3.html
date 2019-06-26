@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
  <head>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>太平军二破江南大营战役专题网站 </title>
+  <script type="text/javascript" src='https://webapi.amap.com/maps?v=1.4.15&key=c7192a79620ec486a34b5c3610cea816'></script>
+  <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
   <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../js/slidebar.css" rel="stylesheet" type="text/css">
   <style type="text/css">
@@ -51,6 +54,13 @@
       filter:alpha(opacity=80); 
       background:url("../img/head.jpg");
     }
+    #container{
+      float: right;
+      margin-top:10px;
+      margin-right:10px;
+      height: 90%;
+      width: 80%;
+    }
     
   </style>
  </head>
@@ -67,9 +77,7 @@
           <a href="../query/query1.html">信息查询</a>
           <a href="../advice/advice1.html">意见反馈</a>
         </div>
-    </div>
-    
-   
+    </div> 
    <div class="content-nav">.
         <div class="content-left">二破江南大营背景</div>
         <div class="content-right">当前位置：太平军二破江南大营/战役详情/战役阶段/安庆保卫战</div>
@@ -94,10 +102,119 @@
           </ul>
         </div>
     </div>
+    <div id="container" class="container"></div>
   </div>
   <div id="end">版权所有：南京师范大学  |  技术支持：于璐&张佘淑  |  ICP备案号：苏ICP备19024534号
 </div>
-    <script>
+    <script type="text/javascript">
+    var map = new AMap.Map('container', {
+        zoom: 7,
+        center: [117.043551,30.50883],
+    });
+
+    AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {
+
+        if (!PathSimplifier.supportCanvas) {
+            alert('当前环境不支持 Canvas！');
+            return;
+        }
+
+        var pathSimplifierIns = new PathSimplifier({
+            zIndex: 100,
+            autoSetFitView: false,
+            map: map, //所属的地图实例
+
+            getPath: function(pathData, pathIndex) {
+
+                return pathData.path;
+            },
+            getHoverTitle: function(pathData, pathIndex, pointIndex) {
+
+                if (pointIndex >= 0) {
+                    //point 
+                    return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
+                }
+
+                return pathData.name + '，点数量' + pathData.path.length;
+            },
+            renderOptions: {
+
+                renderAllPointsIfNumberBelow: 100 //绘制路线节点，如不需要可设置为-1
+            }
+        });
+
+        window.pathSimplifierIns = pathSimplifierIns;
+
+        var myPath = [
+                [117.210256,30.693649],
+                [116.938837,30.396323],
+                [118.376451,31.326319],
+                
+            ],
+            endIdx = 0,
+            data = [{
+                name: '杨载福水师',
+                path: myPath.slice(0, 1)
+            }];
+
+        pathSimplifierIns.setData(data);
+
+        //对第一条线路（即索引 0）创建一个巡航器
+        var navg1 = pathSimplifierIns.createPathNavigator(0, {
+            loop: true, //循环播放
+            speed: 1000 //巡航速度，单位千米/小时
+        });
+
+        function expandPath() {
+
+            function doExpand() {
+
+                endIdx++;
+
+                if (endIdx >= myPath.length) {
+                    return false;
+                }
+
+                var cursor = navg1.getCursor().clone(), //保存巡航器的位置
+                    status = navg1.getNaviStatus();
+
+
+                data[0].path = myPath.slice(0, endIdx + 1);
+                pathSimplifierIns.setData(data); //延展路径
+
+
+                //重新建立一个巡航器
+                navg1 = pathSimplifierIns.createPathNavigator(0, {
+                    //loop: true, //循环播放
+                    speed: 600000 //巡航速度，单位千米/小时
+                });
+
+                if (status !== 'stop') {
+                    navg1.start();
+                }
+
+                //恢复巡航器的位置
+                if (cursor.idx >= 0) {
+                    navg1.moveToPoint(cursor.idx, cursor.tail);
+                }
+
+                return true;
+            }
+
+            if (doExpand()) {
+
+                setTimeout(expandPath, 1000);
+            }
+        }
+
+        
+        navg1.start();
+
+        expandPath();
+    });
+
+       
+
     </script>
  </body>
 </html>

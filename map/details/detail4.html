@@ -7,6 +7,7 @@
   <title>太平军二破江南大营战役专题网站 </title>
   <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../js/slidebar.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="../js/ol.css">
   <style type="text/css">
     body {
         font-family: "微软雅黑";
@@ -51,6 +52,14 @@
       filter:alpha(opacity=80); 
       background:url("../img/head.jpg");
     }
+    #container{
+      float: right;
+      margin-top:10px;
+      margin-right:10px;
+      height: 90%;
+      width: 80%;
+    }
+
     
   </style>
  </head>
@@ -94,10 +103,45 @@
           </ul>
         </div>
     </div>
+    <div id="container" class="container"></div>
+    
   </div>
   <div id="end">版权所有：南京师范大学  |  技术支持：于璐&张佘淑  |  ICP备案号：苏ICP备19024534号
 </div>
+<script src="../js/ol.js"></script>
+
     <script>
+       var layers = [
+                new ol.layer.Tile({
+                    source: new ol.source.TileWMS({
+                        url: 'http://localhost:8080/geoserver/taiping/wms',
+                        params: {
+                            'LAYERS': 'taiping:China1988_prov_region,taiping:lake,taiping:route,taiping:place,taiping:地区界,	taiping:river,taiping:route'
+                            //'TILED': true   //是否要将数据制作成切片，省略后返回的是一张完整图。
+                        },
+                        serverType: 'geoserver',
+                        projection: "EPSG:3857"
+                    }),
+                })
+            ];
+            var map = new ol.Map({
+                layers: layers,
+                target: 'container',
+                view: new ol.View({
+                    center: [118.796623,32.059352],
+                    zoom: 25,
+                    projection:"EPSG:3857"       //默认的是 'EPSG:3857'横轴墨卡托投影
+                })
+            });
+            var scaleLineControl = new ol.control.ScaleLine({
+        // 设置比例尺单位为degrees、imperial、us、nautical或metric（度量单位）
+        units: "metric"
+    });
+    map.addControl(scaleLineControl);
+    var rotateControl=new ol.control.Rotate({
+  autoHide:false
+ });
+ map.addControl(rotateControl);
     </script>
  </body>
 </html>
